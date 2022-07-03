@@ -1,0 +1,21 @@
+{
+    "name": "b13/online-media-updater",
+    "description": "Update youtube/vimeo preview images",
+    "type": "typo3-cms-extension",
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "require": {
+        "typo3/cms-core": "^10.4 || ^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "B13\\OnlineMediaUpdater\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "online_media_updater"
+        }
+    }
+}
