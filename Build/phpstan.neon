@@ -1,0 +1,8 @@
+parameters:
+  level: 6
+
+  paths:
+    - %currentWorkingDirectory%/Classes
+  checkMissingIterableValueType: false
+  # Do not error on unmatched ignored error
+  reportUnmatchedIgnoredErrors: false

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * This file is part of TYPO3 CMS-based extension "online-media-updater" by b13.
@@ -20,7 +20,8 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Filelist\FileListEditIconHookInterface;
 
-class AddOnlineMediaUpdater implements FileListEditIconHookInterface {
+class AddOnlineMediaUpdater implements FileListEditIconHookInterface
+{
 
     /**
      * @var IconFactory
@@ -32,18 +33,18 @@ class AddOnlineMediaUpdater implements FileListEditIconHookInterface {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
     }
 
-    public function manipulateEditIcons(&$cells, &$parentObject)
+    public function manipulateEditIcons(&$cells, &$parentObject): void
     {
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/OnlineMediaUpdater/Backend/Updater');
         $pageRenderer->addInlineLanguageLabelFile('EXT:online_media_updater/Resources/Private/Language/locallang.xlf');
 
         $fileOrFolderObject = $cells['__fileOrFolderObject'];
-        if($fileOrFolderObject instanceof File) {
-            $fileProperties = $fileOrFolderObject->getProperties() ?? [];
+        if ($fileOrFolderObject instanceof File) {
+            $fileProperties = $fileOrFolderObject->getProperties();
             $extension = $fileProperties['extension'] ?? '';
 
-            if(!in_array($extension, ['youtube', 'vimeo'])) {
+            if (!in_array($extension, ['youtube', 'vimeo'])) {
                 return;
             }
 

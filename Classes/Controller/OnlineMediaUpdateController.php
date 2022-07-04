@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * This file is part of TYPO3 CMS-based extension "online-media-updater" by b13.
@@ -37,6 +37,10 @@ class OnlineMediaUpdateController
      */
     public function updateAction(ServerRequestInterface $request): ResponseInterface
     {
+        if ($request->getMethod() !== 'POST') {
+            return new JsonResponse(['Please use a POST request'], 500);
+        }
+
         $parsedBody = $request->getParsedBody();
         $identifier = $parsedBody['identifier'];
         $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);

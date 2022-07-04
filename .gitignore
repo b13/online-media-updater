@@ -1,0 +1,5 @@
+.idea
+.DS_Store
+/.Build
+/composer.lock
+/Build/testing-docker/.env
