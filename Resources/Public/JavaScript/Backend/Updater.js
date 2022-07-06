@@ -25,7 +25,7 @@ define([
             const url = TYPO3.settings.ajaxUrls.b13_online_media_updater;
             const filename = event.currentTarget.dataset.filename
             const payload = {
-                identifier: event.currentTarget.dataset.identifier
+                uid: event.currentTarget.dataset.fileUid
             }
 
             nprogress.start();

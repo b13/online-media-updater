@@ -42,9 +42,9 @@ class OnlineMediaUpdateController
         }
 
         $parsedBody = $request->getParsedBody();
-        $identifier = $parsedBody['identifier'];
+        $uid = $parsedBody['uid'];
         $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-        $file = $resourceFactory->getFileObjectFromCombinedIdentifier($identifier);
+        $file = $resourceFactory->getFileObject($uid);
 
         $onlineMediaViewHelper = GeneralUtility::makeInstance(OnlineMediaHelperRegistry::class)
             ->getOnlineMediaHelper($file);
@@ -71,7 +71,7 @@ class OnlineMediaUpdateController
 
     /**
      * Update processed files
-     * @todo: regenerated processed files, currently only done on reload
+     * @todo: regenerate processed files, currently only done on reload
      */
     protected function updateProcessedFiles(File $file): void
     {

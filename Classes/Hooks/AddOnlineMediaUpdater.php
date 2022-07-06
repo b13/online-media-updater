@@ -49,9 +49,8 @@ class AddOnlineMediaUpdater implements FileListEditIconHookInterface
             }
 
             $cells['updateOnlineMedia'] = '<a href="#" class="btn btn-default t3js-filelist-update-metadata'
-                . '" data-identifier="' . htmlspecialchars($fileOrFolderObject->getCombinedIdentifier())
-                . '" data-file-uid="' . $fileProperties['uid']
                 . '" data-filename="' . htmlspecialchars($fileOrFolderObject->getName())
+                . '" data-file-uid="' . $fileProperties['uid']
                 . '" title="' . $this->getLanguageService()->getLL('online_media_updater.update') . '">'
                 . $this->iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL)->render() . '</a>';
         }
