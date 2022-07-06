@@ -17,9 +17,8 @@ use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Backend\Controller\ContentElement\ElementInformationController as BackendElementInformationController;
 
-class ElementInformationController extends BackendElementInformationController
+class ExtendedElementInformationController extends \TYPO3\CMS\Backend\Controller\ContentElement\ElementInformationController
 {
     public function isOnlineMedia(): bool
     {

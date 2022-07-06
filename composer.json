@@ -7,7 +7,9 @@
     ],
     "require": {
         "typo3/cms-core": "^10.4 || ^11.5",
-        "typo3/cms-filelist": "^10.4 || ^11.5"
+        "typo3/cms-filelist": "^10.4 || ^11.5",
+        "typo3/cms-backend": "^10.4 || ^11.5",
+        "typo3/cms-fluid": "^10.4 || ^11.5"
     },
     "autoload": {
         "psr-4": {

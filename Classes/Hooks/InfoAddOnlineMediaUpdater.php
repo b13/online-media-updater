@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace B13\OnlineMediaUpdater\Hooks;
 
-use B13\OnlineMediaUpdater\ContentElement\ElementInformationController;
+use B13\OnlineMediaUpdater\ContentElement\ExtendedElementInformationController;
+use TYPO3\CMS\Backend\Controller\ContentElement\ElementInformationController;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
@@ -24,22 +25,23 @@ class InfoAddOnlineMediaUpdater
     protected IconFactory $iconFactory;
     protected UriBuilder $uriBuilder;
     protected ModuleTemplateFactory $moduleTemplateFactory;
-    protected ElementInformationController $element;
+    protected ExtendedElementInformationController $element;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $this->moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
-        $this->element = GeneralUtility::makeInstance(ElementInformationController::class, $this->iconFactory, $this->uriBuilder, $this->moduleTemplateFactory);
+        $this->element = GeneralUtility::makeInstance(ExtendedElementInformationController::class, $this->iconFactory, $this->uriBuilder, $this->moduleTemplateFactory);
     }
 
-    public function render($type, $element): string
+    public function render(string $type, ElementInformationController $element): string
     {
         $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
         return $this->element->mainAction($request)->getBody()->getContents();
     }
 
-    public function isValid($type, $element): bool
+    public function isValid(string $type, ElementInformationController $element): bool
     {
         return $this->element->isOnlineMedia();
     }
