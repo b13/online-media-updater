@@ -1,6 +1,6 @@
 {
     "name": "b13/online-media-updater",
-    "description": "Update youtube/vimeo preview images",
+    "description": "Update YouTube/Vimeo preview images",
     "type": "typo3-cms-extension",
     "license": [
         "GPL-2.0-or-later"
