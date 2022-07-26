@@ -44,7 +44,8 @@ class AddOnlineMediaUpdater implements FileListEditIconHookInterface
             $fileProperties = $fileOrFolderObject->getProperties();
             $extension = $fileProperties['extension'] ?? '';
 
-            if (!in_array($extension, ['youtube', 'vimeo'])) {
+            $registeredHelpers = $GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers'];
+            if (!array_key_exists($extension, $registeredHelpers)) {
                 return;
             }
 
