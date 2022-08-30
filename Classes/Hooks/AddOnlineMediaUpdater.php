@@ -22,7 +22,6 @@ use TYPO3\CMS\Filelist\FileListEditIconHookInterface;
 
 class AddOnlineMediaUpdater implements FileListEditIconHookInterface
 {
-
     /**
      * @var IconFactory
      */
