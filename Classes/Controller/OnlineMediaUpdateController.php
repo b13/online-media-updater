@@ -57,7 +57,7 @@ class OnlineMediaUpdateController
         $this->updatePreviewDimensions($file, $previewPath);
         $this->updateProcessedFiles($file);
 
-        return new JsonResponse();
+        return new JsonResponse(['path' => $previewPath]);
     }
 
     protected function getTempFolderPath(): string
