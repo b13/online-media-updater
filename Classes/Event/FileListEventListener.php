@@ -47,7 +47,7 @@ final class FileListEventListener
                 return;
             }
 
-            $actionItems['tiktok'] = '<a href="#" class="btn btn-default t3js-filelist-update-metadata'
+            $actionItems['updateOnlineMedia'] = '<a href="#" class="btn btn-default t3js-filelist-update-metadata'
                 . '" data-filename="' . htmlspecialchars($fileOrFolderObject->getName())
                 . '" data-file-uid="' . $fileProperties['uid']
                 . '" title="' . $this->getLanguageService()->getLL('online_media_updater.update') . '">'
