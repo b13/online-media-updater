@@ -1,16 +1,11 @@
 {
     "name": "b13/online-media-updater",
+	"version": "2.0.0",
     "description": "Update YouTube/Vimeo preview images",
     "type": "typo3-cms-extension",
     "license": [
         "GPL-2.0-or-later"
     ],
-    "require": {
-        "typo3/cms-core": "^10.4 || ^11.5",
-        "typo3/cms-filelist": "^10.4 || ^11.5",
-        "typo3/cms-backend": "^10.4 || ^11.5",
-        "typo3/cms-fluid": "^10.4 || ^11.5"
-    },
     "autoload": {
         "psr-4": {
             "B13\\OnlineMediaUpdater\\": "Classes/"
@@ -21,10 +16,6 @@
             "extension-key": "online_media_updater",
             "web-dir": ".Build/Web"
         }
-    },
-    "require-dev": {
-        "phpstan/phpstan": "^1.8",
-        "typo3/coding-standards": "^0.5.3"
     },
     "config": {
         "vendor-dir": ".Build/vendor",

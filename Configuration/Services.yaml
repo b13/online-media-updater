@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  B13\OnlineMediaUpdater\:
+    resource: '../Classes/*'
+    exclude:
+      - '../Classes/Domain/Model/*'
+      - '../Classes/Helper/*'
+
+  B13\OnlineMediaUpdater\Event\FileListEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'b13/online-media-updater/filelist-listener'
+        event: TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent
