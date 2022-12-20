@@ -40,8 +40,10 @@ class ModifyOnlineMediaHelperEventListener
 {
     public function __invoke(ModifyOnlineMediaHelperEvent $event): void
     {
-        $onlineMediaHelper = GeneralUtility::makeInstance(YourHelper::class, 'file_extension');
-        $event->setOnlineMediaHelper($onlineMediaHelper);
+        if ($event->getFileExtension() === 'file_extension') {
+            $onlineMediaHelper = GeneralUtility::makeInstance(YourHelper::class, 'file_extension');
+            $event->setOnlineMediaHelper($onlineMediaHelper);
+        }
     }
 }
 ```

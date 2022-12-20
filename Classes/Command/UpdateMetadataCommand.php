@@ -23,8 +23,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
+use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\AbstractOnlineMediaHelper;
+use TYPO3\CMS\Core\Resource\ProcessedFileRepository;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -54,7 +57,8 @@ class UpdateMetadataCommand extends Command
         protected MetaDataRepository       $metadataRepository,
         protected ResourceFactory          $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
-        protected OnlineMediaHelperFactory $onlineMediaHelperFactory
+        protected OnlineMediaHelperFactory $onlineMediaHelperFactory,
+        protected ProcessedFileRepository  $processedFileRepository
     )
     {
         parent::__construct();
@@ -71,7 +75,7 @@ class UpdateMetadataCommand extends Command
 
             $onlineMediaHelper = $this->onlineMediaHelperFactory->createOnlineMediaHelper($fileExtension);
             $modifyOnlineMediaHelperEvent = $this->eventDispatcher->dispatch(
-                new ModifyOnlineMediaHelperEvent($onlineMediaHelper)
+                new ModifyOnlineMediaHelperEvent($onlineMediaHelper, $fileExtension)
             );
             $onlineMediaHelper = $modifyOnlineMediaHelperEvent->getOnlineMediaHelper();
 
@@ -89,12 +93,12 @@ class UpdateMetadataCommand extends Command
                     $file = $this->resourceFactory->getFileObject($video['uid']);
                     $metaData = $onlineMediaHelper->getMetaData($file);
                     if (!empty($metaData)) {
-                        // TODO Imagehandling?
-
                         $this->metadataRepository->update(
                             $file->getUid(),
                             $this->handleMetaData($metaData, $file)
                         );
+                        $this->handlePreviewImage($onlineMediaHelper, $file);
+
                         $rows[] = [$file->getUid(), $file->getProperty('title'), $file->getPublicUrl()];
                     }
                 }
@@ -110,12 +114,7 @@ class UpdateMetadataCommand extends Command
         return Command::SUCCESS;
     }
 
-    /**
-     * @param $metaData
-     * @param File $file
-     * @return array
-     */
-    protected function handleMetaData($metaData, File $file): array
+    protected function handleMetaData(array $metaData, File $file): array
     {
         $newData = [
             'width' => (int)$metaData['width'],
@@ -128,5 +127,27 @@ class UpdateMetadataCommand extends Command
             new ModifyMetaDataEvent($file, $newData)
         );
         return $modifyMetaDataEvent->getMetaData();
+    }
+
+    protected function getTempFolderPath(): string
+    {
+        $path = Environment::getPublicPath() . '/typo3temp/assets/online_media/';
+        if (!is_dir($path)) {
+            GeneralUtility::mkdir_deep($path);
+        }
+        return $path;
+    }
+
+    protected function handlePreviewImage(AbstractOnlineMediaHelper $onlineMediaHelper, File $file): void
+    {
+        $processedFiles = $this->processedFileRepository->findAllByOriginalFile($file);
+        foreach ($processedFiles as $processedFile) {
+            $processedFile->delete();
+        }
+
+        $videoId = $onlineMediaHelper->getOnlineMediaId($file);
+        $temporaryFileName = $this->getTempFolderPath() . $file->getExtension() . '_' . md5($videoId) . '.jpg';
+        @unlink($temporaryFileName);
+        $onlineMediaHelper->getPreviewImage($file);
     }
 }

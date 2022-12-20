@@ -16,7 +16,10 @@ use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\AbstractOnlineMediaHelper;
 
 final class ModifyOnlineMediaHelperEvent
 {
-    public function __construct(protected ?AbstractOnlineMediaHelper $onlineMediaHelper)
+    public function __construct(
+        protected ?AbstractOnlineMediaHelper $onlineMediaHelper,
+        protected string $fileExtension
+    )
     {
     }
 
@@ -34,5 +37,21 @@ final class ModifyOnlineMediaHelperEvent
     public function setOnlineMediaHelper(?AbstractOnlineMediaHelper $onlineMediaHelper): void
     {
         $this->onlineMediaHelper = $onlineMediaHelper;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileExtension(): string
+    {
+        return $this->fileExtension;
+    }
+
+    /**
+     * @param string $fileExtension
+     */
+    public function setFileExtension(string $fileExtension): void
+    {
+        $this->fileExtension = $fileExtension;
     }
 }
