@@ -8,9 +8,9 @@ services:
     resource: '../Classes/*'
     exclude:
       - '../Classes/Domain/Model/*'
-      - '../Classes/Helper/*'
+      - '../Classes/Event/*'
 
-  B13\OnlineMediaUpdater\Event\FileListEventListener:
+  B13\OnlineMediaUpdater\EventListener\FileListEventListener:
     tags:
       - name: event.listener
         identifier: 'b13/online-media-updater/filelist-listener'

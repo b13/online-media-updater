@@ -10,7 +10,7 @@ declare(strict_types=1);
  * of the License, or any later version.
  */
 
-namespace B13\OnlineMediaUpdater\Event;
+namespace B13\OnlineMediaUpdater\EventListener;
 
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
