@@ -19,8 +19,7 @@ final class ModifyMetaDataEvent
     public function __construct(
         protected ?File $fileObject,
         protected array $metaData
-    )
-    {
+    ) {
     }
 
     /**

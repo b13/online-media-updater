@@ -3,7 +3,7 @@
 return [
     'dependencies' => [
         'core',
-        'backend'
+        'backend',
     ],
     'tags' => [
         'online-media-updater.updater',

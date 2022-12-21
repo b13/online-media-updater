@@ -19,8 +19,7 @@ final class ModifyOnlineMediaHelperEvent
     public function __construct(
         protected ?AbstractOnlineMediaHelper $onlineMediaHelper,
         protected string $fileExtension
-    )
-    {
+    ) {
     }
 
     /**

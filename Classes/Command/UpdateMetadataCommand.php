@@ -53,16 +53,17 @@ class UpdateMetadataCommand extends Command
     }
 
     public function __construct(
-        protected FileRepository           $fileRepository,
-        protected MetaDataRepository       $metadataRepository,
-        protected ResourceFactory          $resourceFactory,
+        protected FileRepository $fileRepository,
+        protected MetaDataRepository $metadataRepository,
+        protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
         protected OnlineMediaHelperFactory $onlineMediaHelperFactory,
         protected ProcessedFileRepository  $processedFileRepository
-    )
-    {
+    ) {
         parent::__construct();
     }
+
+
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -116,15 +117,19 @@ class UpdateMetadataCommand extends Command
 
     protected function handleMetaData(array $metaData, File $file): array
     {
-        $newData = [
+        $newMetaData = [
             'width' => (int)$metaData['width'],
-            'height' => (int)$metaData['height']
+            'height' => (int)$metaData['height'],
         ];
-        if (isset($metaData['title'])) $newData['title'] = $metaData['title'];
-        if (isset($metaData['author'])) $newData['author'] = $metaData['author'];
+        if (isset($metaData['title'])) {
+            $newMetaData['title'] = $metaData['title'];
+        }
+        if (isset($metaData['author'])) {
+            $newMetaData['author'] = $metaData['author'];
+        }
 
         $modifyMetaDataEvent = $this->eventDispatcher->dispatch(
-            new ModifyMetaDataEvent($file, $newData)
+            new ModifyMetaDataEvent($file, $newMetaData)
         );
         return $modifyMetaDataEvent->getMetaData();
     }
