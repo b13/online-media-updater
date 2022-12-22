@@ -16,8 +16,8 @@ use B13\OnlineMediaUpdater\ContentElement\ExtendedElementInformationController;
 use TYPO3\CMS\Backend\Controller\ContentElement\ElementInformationController;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class InfoAddOnlineMediaUpdater
@@ -26,23 +26,37 @@ class InfoAddOnlineMediaUpdater
     protected UriBuilder $uriBuilder;
     protected ModuleTemplateFactory $moduleTemplateFactory;
     protected ExtendedElementInformationController $element;
+    protected ResourceFactory $resourceFactory;
 
     public function __construct()
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $this->moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
-        $this->element = GeneralUtility::makeInstance(ExtendedElementInformationController::class, $this->iconFactory, $this->uriBuilder, $this->moduleTemplateFactory);
+        $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+
+        $this->element = GeneralUtility::makeInstance(
+            ExtendedElementInformationController::class,
+            $this->iconFactory,
+            $this->uriBuilder,
+            $this->moduleTemplateFactory,
+            $this->resourceFactory
+        );
     }
 
     public function render(string $type, ElementInformationController $element): string
     {
-        $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
-        return $this->element->mainAction($request)->getBody()->getContents();
+        // There is no init function any more. Here I first had to add the setter and getter in ElementInformationController.
+        $this->element->setFileObject($element->getFileObject());
+        $this->element->setTable($element->getTable());
+        $this->element->setRow($element->getRow());
+        $this->element->setType($type);
+
+        return $this->element->hookedContent();
     }
 
     public function isValid(string $type, ElementInformationController $element): bool
     {
-        return $this->element->isOnlineMedia();
+        return $this->element->isOnlineMedia($element->getFileObject());
     }
 }

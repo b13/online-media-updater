@@ -2,10 +2,11 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Online Media Updater',
+    'version' => '2.0.0',
     'description' => 'Update YouTube/Vimeo metadata in fileadmin',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-11.5.99',
+            'typo3' => '12.0.0-12.9.99',
         ],
     ],
     'autoload' => [

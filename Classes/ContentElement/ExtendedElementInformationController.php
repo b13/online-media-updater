@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace B13\OnlineMediaUpdater\ContentElement;
 
-use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -20,26 +19,25 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ExtendedElementInformationController extends \TYPO3\CMS\Backend\Controller\ContentElement\ElementInformationController
 {
-    public function isOnlineMedia(): bool
+    public function isOnlineMedia($fileObject): bool
     {
         $registeredHelpers = $GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers'];
-        $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
-        $this->init($request);
 
-        return array_key_exists($this->fileObject->getExtension(), $registeredHelpers);
+        return array_key_exists($fileObject->getExtension(), $registeredHelpers);
     }
 
     /**
      * Compiles the whole content to be outputted, which is then set as content to the moduleTemplate
      * There is a hook to do a custom rendering of a record.
-     *
-     * @param ServerRequestInterface $request
      */
-    protected function main(ServerRequestInterface $request): void
+    public function hookedContent(): string
     {
-        $content = '';
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
+        $queryParams = $request->getQueryParams();
+        $uid = $queryParams['uid'] ?? '';
+
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/OnlineMediaUpdater/Backend/Updater');
+        $pageRenderer->loadJavaScriptModule('@online-media-updater/Updater.js');
         $pageRenderer->addInlineLanguageLabelFile('EXT:online_media_updater/Resources/Private/Language/locallang.xlf');
 
         // Rendering of the output via fluid
@@ -52,19 +50,15 @@ class ExtendedElementInformationController extends \TYPO3\CMS\Backend\Controller
             'EXT:online_media_updater/Resources/Private/Templates/ElementInformation.html'
         ));
 
-        if ($this->access) {
-            $view->assign('accessAllowed', true);
-            $view->assignMultiple($this->getPageTitle());
-            $view->assignMultiple($this->getPreview());
-            $view->assignMultiple($this->getPropertiesForTable());
-            $view->assignMultiple($this->getReferences($request));
-            $view->assign('returnUrl', GeneralUtility::sanitizeLocalUrl($request->getQueryParams()['returnUrl'] ?? ''));
-            $view->assign('maxTitleLength', $this->getBackendUser()->uc['titleLen'] ?? 20);
-            $content .= $view->render();
-        } else {
-            $content .= $view->render();
-        }
+        // Access check is not necessary, is checked in the ElementInformationController->mainAction()
+        $view->assign('accessAllowed', true);
+        $view->assignMultiple($this->getPageTitle());
+        $view->assignMultiple($this->getPreview());
+        $view->assignMultiple($this->getPropertiesForTable());
+        $view->assignMultiple($this->getReferences($request, $uid));
+        $view->assign('returnUrl', GeneralUtility::sanitizeLocalUrl($queryParams['returnUrl'] ?? ''));
+        $view->assign('maxTitleLength', $this->getBackendUser()->uc['titleLen'] ?? 20);
 
-        $this->moduleTemplate->setContent($content);
+        return $view->render();
     }
 }

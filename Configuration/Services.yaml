@@ -1,0 +1,24 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  B13\OnlineMediaUpdater\:
+    resource: '../Classes/*'
+    exclude:
+      - '../Classes/Domain/Model/*'
+      - '../Classes/Event/*'
+
+  B13\OnlineMediaUpdater\EventListener\FileListEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'b13/online-media-updater/filelist-listener'
+        event: TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent
+
+  B13\OnlineMediaUpdater\Command\UpdateMetadataCommand:
+    tags:
+      - name: 'console.command'
+        command: 'online-media-updater:updateMetadata'
+        description: 'Updates online media metadata'
+        schedulable: true

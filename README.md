@@ -13,6 +13,73 @@ Install this extension via `composer req b13/online-media-updater`. In v10 activ
 
 Once installed, an "Update preview image" button is available for *.youtube and *.vimeo files in the filelist.
 
+## Events
+
+### Register custom media extension for metadata update
+
+First register an EventListener for OnlineMediaHelper in your services.yaml
+
+```
+  Vendor\Extension\EventListener\ModifyOnlineMediaHelperEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'your-custom-identifier'
+        event: B13\OnlineMediaUpdater\Event\ModifyOnlineMediaHelperEvent
+```
+
+Afterwards, we will hand over our own OnlineMediaHelper to the event.
+
+```
+namespace Vendor\Extension\EventListener;
+
+use B13\OnlineMediaUpdater\Event\ModifyOnlineMediaHelperEvent;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Vendor\Extension\Helper\YourHelper;
+
+class ModifyOnlineMediaHelperEventListener
+{
+    public function __invoke(ModifyOnlineMediaHelperEvent $event): void
+    {
+        if ($event->getFileExtension() === 'file_extension') {
+            $onlineMediaHelper = GeneralUtility::makeInstance(YourHelper::class, 'file_extension');
+            $event->setOnlineMediaHelper($onlineMediaHelper);
+        }
+    }
+}
+```
+
+### Register custom fields for metadata update
+
+First register an EventListener for MetaData in your services.yaml
+
+```
+  Vendor\Extension\EventListener\ModifyMetaDataEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'your-custom-identifier'
+        event: B13\OnlineMediaUpdater\Event\ModifyMetaDataEvent
+```
+
+In the EventListener you can now set your own fields or overwrite existing values.
+
+```
+namespace Vendor\Extension\EventListener;
+
+use B13\OnlineMediaUpdater\Event\ModifyMetaDataEvent;
+
+class ModifyMetaDataEventListener
+{
+    public function __invoke(ModifyMetaDataEvent $event): void
+    {
+        $metaData = $event->getMetaData();
+        $metaData['title'] = 'My custom title';
+        $metaData['new_field'] = 'My new fields';
+
+        $event->setMetaData($metaData);
+    }
+}
+```
+
 ## Todo
  * [] Pre-process images like backend thumbnails
  * [] Allow update of other metadata e.g. title
