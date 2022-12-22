@@ -58,7 +58,7 @@ class UpdateMetadataCommand extends Command
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
         protected OnlineMediaHelperFactory $onlineMediaHelperFactory,
-        protected ProcessedFileRepository  $processedFileRepository
+        protected ProcessedFileRepository $processedFileRepository
     ) {
         parent::__construct();
     }
