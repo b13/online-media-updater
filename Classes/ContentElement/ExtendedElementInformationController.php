@@ -15,6 +15,7 @@ namespace B13\OnlineMediaUpdater\ContentElement;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -22,11 +23,14 @@ class ExtendedElementInformationController extends \TYPO3\CMS\Backend\Controller
 {
     public function isOnlineMedia(): bool
     {
-        $registeredHelpers = $GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers'];
         $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
         $this->init($request);
 
-        return array_key_exists($this->fileObject->getExtension(), $registeredHelpers);
+        if (!$this->fileObject instanceof File) {
+            return false;
+        }
+
+        return array_key_exists($this->fileObject->getExtension(), $GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers'] ?? []);
     }
 
     /**
