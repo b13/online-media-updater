@@ -29,6 +29,12 @@ class InfoAddOnlineMediaUpdater
 
     public function __construct()
     {
+        if (!class_exists('TYPO3\CMS\Backend\Template\ModuleTemplateFactory')) {
+            // TYPO3 10
+            $this->element = GeneralUtility::makeInstance(ExtendedElementInformationController::class);
+            return;
+        }
+
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $this->moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
