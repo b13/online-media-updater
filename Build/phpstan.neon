@@ -6,3 +6,5 @@ parameters:
   checkMissingIterableValueType: false
   # Do not error on unmatched ignored error
   reportUnmatchedIgnoredErrors: false
+includes:
+    - phpstan-baseline.neon

@@ -6,10 +6,10 @@
         "GPL-2.0-or-later"
     ],
     "require": {
-        "typo3/cms-core": "^10.4 || ^11.5",
-        "typo3/cms-filelist": "^10.4 || ^11.5",
-        "typo3/cms-backend": "^10.4 || ^11.5",
-        "typo3/cms-fluid": "^10.4 || ^11.5"
+        "typo3/cms-core": "^11.5 || ^12",
+        "typo3/cms-filelist": "^11.5 || ^12",
+        "typo3/cms-backend": "^11.5 || ^12",
+        "typo3/cms-fluid": "^11.5 || ^12"
     },
     "autoload": {
         "psr-4": {
