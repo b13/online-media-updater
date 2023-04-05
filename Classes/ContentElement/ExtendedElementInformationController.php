@@ -19,6 +19,9 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
+/**
+ * @todo: Remove when v11 support was dropped
+ */
 class ExtendedElementInformationController extends \TYPO3\CMS\Backend\Controller\ContentElement\ElementInformationController
 {
     public function isOnlineMedia(): bool
@@ -43,7 +46,7 @@ class ExtendedElementInformationController extends \TYPO3\CMS\Backend\Controller
     {
         $content = '';
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/OnlineMediaUpdater/Backend/Updater');
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/OnlineMediaUpdater/Backend/UpdaterV11');
         $pageRenderer->addInlineLanguageLabelFile('EXT:online_media_updater/Resources/Private/Language/locallang.xlf');
 
         // Rendering of the output via fluid
@@ -53,7 +56,7 @@ class ExtendedElementInformationController extends \TYPO3\CMS\Backend\Controller
 
         // EXT:online_media_updater - set path to custom template for the preview button
         $view->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName(
-            'EXT:online_media_updater/Resources/Private/Templates/ElementInformation.html'
+            'EXT:online_media_updater/Resources/Private/TemplateOverrides/Templates/ContentElement/ElementInformationV11.html'
         ));
 
         if ($this->access) {
