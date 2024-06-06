@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages">
+        <header/>
+        <body>
+            <trans-unit id="online_media_updater.update">
+                <source>Update preview image</source>
+                <target>Vorschaubild aktualisieren</target>
+            </trans-unit>
+            <trans-unit id="online_media_updater.alert.success">
+                <source>Success</source>
+                <target>Erfolg</target>
+            </trans-unit>
+            <trans-unit id="online_media_updater.alert.success.text">
+                <source>Preview image updated</source>
+                <target>Vorschaubild aktualisiert</target>
+            </trans-unit>
+            <trans-unit id="online_media_updater.alert.error">
+                <source>Failed to update preview image</source>
+                <target>Vorschaubild konnte nicht aktualisiert werden</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
