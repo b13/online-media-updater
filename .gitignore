@@ -2,4 +2,4 @@
 .DS_Store
 /.Build
 /composer.lock
-/Build/testing-docker/.env
+.php-cs-fixer.cache

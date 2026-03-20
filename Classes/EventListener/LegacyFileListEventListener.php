@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace B13\OnlineMediaUpdater\EventListener;
 
-use TYPO3\CMS\Backend\Template\Components\ComponentFactory;
+use TYPO3\CMS\Backend\Template\Components\Buttons\LinkButton;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconSize;
@@ -23,21 +23,21 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent;
 
-#[AsEventListener(identifier: 'b13/online-media-updater/filelist-listener')]
-final class FileListEventListener
+#[AsEventListener(identifier: 'b13/online-media-updater/legacy-filelist-listener')]
+final class LegacyFileListEventListener
 {
     public function __construct(protected IconFactory $iconFactory) {}
 
     public function __invoke(ProcessFileListActionsEvent $event): void
     {
-        if ((new Typo3Version())->getMajorVersion() < 14) {
+        if ((new Typo3Version())->getMajorVersion() > 13) {
             return;
         }
+        $actionItems = $event->getActionItems();
+
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->loadJavaScriptModule('@online-media-updater/Updater.js');
+        $pageRenderer->loadJavaScriptModule('@online-media-updater/LegacyUpdater.js');
         $pageRenderer->addInlineLanguageLabelFile('EXT:online_media_updater/Resources/Private/Language/locallang.xlf');
-        // can be injected when v13 support is removed
-        $componentFactory = GeneralUtility::makeInstance(ComponentFactory::class);
 
         $fileOrFolderObject = $event->getResource();
         if ($fileOrFolderObject instanceof File) {
@@ -49,8 +49,9 @@ final class FileListEventListener
                 return;
             }
 
-            $button = $componentFactory->createLinkButton();
+            $button = GeneralUtility::makeInstance(LinkButton::class);
             $button->setHref('#')
+                ->setClasses('dropdown-item dropdown-item-spaced')
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:online_media_updater/Resources/Private/Language/locallang.xlf:online_media_updater.update'))
                 ->setIcon($this->iconFactory->getIcon('actions-refresh', IconSize::SMALL))
                 ->setDataAttributes([
@@ -58,11 +59,10 @@ final class FileListEventListener
                     'file-uid' => $fileProperties['uid'],
                     't3js-filelist-update-metadata' => 1,
                 ]);
-            $event->setAction(
-                $button,
-                'updateOnlineMedia',
-            );
+            $actionItems['updateOnlineMedia'] = $button;
         }
+
+        $event->setActionItems($actionItems);
     }
 
     protected function getLanguageService(): LanguageService

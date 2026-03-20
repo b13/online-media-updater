@@ -12,32 +12,27 @@ declare(strict_types=1);
 
 namespace B13\OnlineMediaUpdater\ViewHelpers;
 
-use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class IsOnlineMediaViewHelper extends AbstractViewHelper
 {
+    public function __construct(private readonly ResourceFactory $resourceFactory) {}
+
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('fileUid', 'int', 'File uid');
+        $this->registerArgument('fileUid', 'int', 'File uid', true);
     }
 
     public function render(): bool
     {
-        if (is_int($this->arguments['fileUid'])) {
-            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-            $file = $resourceFactory->getFileObject($this->arguments['fileUid']);
-
-            if (!$file instanceof File) {
-                return false;
-            }
-
+        try {
+            $file = $this->resourceFactory->getFileObject($this->arguments['fileUid']);
             return array_key_exists($file->getExtension(), $GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers'] ?? []);
+        } catch (FileDoesNotExistException) {
         }
-
         return false;
     }
 }

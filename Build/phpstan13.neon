@@ -5,4 +5,4 @@ parameters:
     - %currentWorkingDirectory%/Classes
 
   excludePaths:
-    - %currentWorkingDirectory%/Classes/EventListener/LegacyFileListEventListener.php
+    - %currentWorkingDirectory%/Classes/EventListener/FileListEventListener.php

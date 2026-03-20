@@ -1,1 +1,4 @@
 templates.typo3/cms-backend.1680536038 = b13/online-media-updater:Resources/Private/TemplateOverrides
+[typo3.branch == "13.4"]
+    templates.typo3/cms-backend.1680536038 = b13/online-media-updater:Resources/Private/LegacyTemplateOverrides
+[end]
