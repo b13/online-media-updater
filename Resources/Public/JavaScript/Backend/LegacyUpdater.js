@@ -4,8 +4,9 @@
 
 import AjaxRequest from "@typo3/core/ajax/ajax-request.js"
 import Notification from "@typo3/backend/notification.js";
+import nprogress from "nprogress";
 
-class Updater {
+class LegacyUpdater {
   constructor() {
     document.querySelectorAll('a[data-t3js-filelist-update-metadata]').forEach((item) => {
       item.addEventListener('click', (event) => {
@@ -20,23 +21,12 @@ class Updater {
     const payload = {
       uid: event.currentTarget.dataset.fileUid
     }
-    const item = event.currentTarget;
-    const overallProgressBar = document.createElement('typo3-backend-progress-bar');
-    // media module
-    let progressContainer = document.querySelector('tr[data-filelist-uid="' + item.getAttribute('data-file-uid') +'"] td.col-title');
-    if (!progressContainer) {
-      progressContainer = document.querySelector('div[data-progress-container-uid="' + item.getAttribute('data-file-uid') +'"]');
-    }
-    if (progressContainer) {
-      progressContainer.appendChild(overallProgressBar);
-      overallProgressBar.start();
-    }
+
+    nprogress.start();
     new AjaxRequest(url)
       .post(payload).then(async function (response) {
       const data = await response.resolve();
-      if (progressContainer) {
-        overallProgressBar.done();
-      }
+
       Notification.success(
         TYPO3.lang['online_media_updater.alert.success'],
         TYPO3.lang['online_media_updater.alert.success.text'] + ' ' + filename
@@ -48,4 +38,4 @@ class Updater {
   }
 }
 
-export default new Updater();
+export default new LegacyUpdater();
